@@ -89,3 +89,5 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
+theme_mode: dark
+timezone: Asia/Baku
