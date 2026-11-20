@@ -6,6 +6,8 @@ media:
   input: assets/img
   output: /assets/img
   categories: [image]
+  extensions: [jpg, jpeg, png, webp, gif, svg, avif]
+  rename: safe
 
 content:
   - name: posts
@@ -14,8 +16,7 @@ content:
     path: _posts
     format: yaml-frontmatter
     subfolders: false
-    exclude:
-      - .placeholder
+    exclude: [".placeholder", ".gitkeep"]
     filename:
       template: "{year}-{month}-{day}-{primary}.md"
       field: create
@@ -25,7 +26,7 @@ content:
       primary: title
       fields: [title, date, published, categories]
       sort: [date, title]
-      search: [title, description, tags]
+      search: [title, description, categories, tags]
       default:
         sort: date
         order: desc
@@ -35,26 +36,35 @@ content:
         type: string
         required: true
 
+      - name: body
+        label: Article
+        type: rich-text
+        options:
+          format: markdown
+          switcher: true
+
       - name: description
         label: Summary
         type: text
+        description: "A short description for the homepage and search previews."
 
       - name: image
         label: Cover Image
         type: image
+        description: "A landscape image around 1200 x 630 works well."
 
       - name: categories
         label: Categories
         type: string
         list:
           max: 2
-        description: "Add a main category and, optionally, a subcategory."
+        description: "Add the main category first, then an optional subcategory."
 
       - name: tags
         label: Tags
         type: string
         list: true
-        description: "Add one lowercase tag per item."
+        description: "Add one lowercase tag per item, such as windows or jekyll."
 
       - name: date
         label: Publication Date
@@ -63,18 +73,18 @@ content:
         options:
           time: true
           format: "yyyy-MM-dd HH:mm:ss xx"
-        description: "Leave blank to use the date in the filename."
+        description: "Optional. Use this to override the date in the filename."
 
       - name: author
         label: Author ID
         type: string
-        description: "Use an ID from _data/authors.yml, or leave blank for the default author."
+        description: "Use an ID from Authors, or leave blank for the site default."
 
       - name: published
         label: Published
         type: boolean
         default: true
-        description: "Turn off to hide this post from the site. Its source is still visible in a public repository."
+        description: "Turn off to hide the post from the site. Its source remains visible in the public repository."
 
       - name: pin
         label: Pin to Home
@@ -90,6 +100,7 @@ content:
         label: Enable Comments
         type: boolean
         default: true
+        description: "Requires a comment provider configured in Chirpy."
 
       - name: math
         label: Enable Math
@@ -101,61 +112,149 @@ content:
         type: boolean
         default: false
 
-      - name: body
-        label: Body
-        type: rich-text
-        options:
-          format: markdown
-          switcher: true
+  - name: pages
+    label: Pages
+    type: group
+    items:
+      - name: about
+        label: About
+        type: file
+        path: _tabs/about.md
+        format: yaml-frontmatter
+        operations:
+          delete: false
+        fields:
+          - name: title
+            label: Page Title
+            type: string
+            description: "Leave blank to use Chirpy's default title."
 
-  - name: about
-    label: About
-    type: file
-    path: _tabs/about.md
-    format: yaml-frontmatter
-    fields:
-      - name: body
-        label: Body
-        type: rich-text
-        options:
-          format: markdown
-          switcher: true
+          - name: icon
+            label: Sidebar Icon
+            type: string
+            description: "For example, fas fa-info-circle."
 
-  - name: site
-    label: Site Settings
-    type: file
-    path: _config.yml
-    format: yaml
-    fields:
-      - name: title
-        label: Site Name
-        type: string
-        required: true
+          - name: order
+            label: Sidebar Order
+            type: number
 
-      - name: tagline
-        label: Tagline
-        type: string
+          - name: body
+            label: About Page
+            type: rich-text
+            options:
+              format: markdown
+              switcher: true
 
-      - name: description
-        label: Site Description
-        type: text
+      - name: navigation
+        label: Navigation Pages
+        type: collection
+        path: _tabs
+        format: yaml-frontmatter
+        exclude: [about.md]
+        subfolders: false
+        filename:
+          template: "{primary}.md"
+          field: create
+        operations:
+          rename: false
+          delete: false
+        view:
+          primary: title
+        fields:
+          - name: title
+            label: Page Title
+            type: string
 
-      - name: avatar
-        label: Profile Picture
-        type: image
+          - name: icon
+            label: Sidebar Icon
+            type: string
+            description: "For example, fas fa-link."
 
-      - name: social_preview_image
-        label: Default Social Preview Image
-        type: image
+          - name: order
+            label: Sidebar Order
+            type: number
 
-  - name: contact
-    label: Sidebar Contact Links
-    type: file
-    path: _data/contact.yml
-    format: raw
+          - name: body
+            label: Page Content
+            type: rich-text
+            options:
+              format: markdown
+              switcher: true
 
-  - name: sharing
-    label: Post Sharing Buttons
-    type: file
-    path: _data/share.yml
-    format: raw
+  - name: site-admin
+    label: Site Administration
+    type: group
+    items:
+      - name: site
+        label: Site Settings
+        type: file
+        path: _config.yml
+        format: yaml
+        operations:
+          delete: false
+        fields:
+          - name: title
+            label: Site Name
+            type: string
+            required: true
+
+          - name: tagline
+            label: Tagline
+            type: string
+
+          - name: description
+            label: Site Description
+            type: text
+
+          - name: avatar
+            label: Profile Picture
+            type: image
+
+          - name: social_preview_image
+            label: Default Social Preview Image
+            type: image
+
+          - name: theme_mode
+            label: Default Color Mode
+            type: select
+            options:
+              values:
+                - name: light
+                  label: Light
+                - name: dark
+                  label: Dark
+            description: "Leave empty to follow the visitor's system setting."
+
+          - name: timezone
+            label: Time Zone
+            type: string
+            description: "For example, Asia/Baku."
+
+          - name: paginate
+            label: Posts Per Page
+            type: number
+            description: "Use a positive whole number, such as 10."
+
+      - name: authors
+        label: Authors
+        type: file
+        path: _data/authors.yml
+        format: raw
+        operations:
+          delete: false
+
+      - name: contact
+        label: Sidebar Contact Links
+        type: file
+        path: _data/contact.yml
+        format: raw
+        operations:
+          delete: false
+
+      - name: sharing
+        label: Post Sharing Buttons
+        type: file
+        path: _data/share.yml
+        format: raw
+        operations:
+          delete: false
