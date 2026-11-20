@@ -9,18 +9,67 @@ content:
     path: _posts
     format: yaml-frontmatter
     filename: "{year}-{month}-{day}-{title}.md"
+    exclude:
+      - .placeholder
+    view:
+      primary: title
     fields:
       - name: title
         label: Title
         type: string
         required: true
+
+      - name: description
+        label: Summary
+        type: text
+
       - name: image
         label: Cover Image
         type: image
+
+      - name: categories
+        label: Categories
+        type: string
+        list:
+          max: 2
+
       - name: tags
         label: Tags
         type: string
         list: true
+
+      - name: author
+        label: Author ID
+        type: string
+
+      - name: date
+        label: Publication Date
+        type: date
+        default: ""
+        options:
+          time: true
+          format: "yyyy-MM-dd HH:mm:ss xx"
+
+      - name: pin
+        label: Pin to Home
+        type: boolean
+        default: false
+
+      - name: toc
+        label: Table of Contents
+        type: boolean
+        default: true
+
+      - name: comments
+        label: Enable Comments
+        type: boolean
+        default: true
+
+      - name: published
+        label: Published
+        type: boolean
+        default: true
+
       - name: body
         label: Body
         type: rich-text
@@ -32,13 +81,33 @@ content:
     format: yaml-frontmatter
     fields:
       - name: icon
-        label: Icon
+        label: Menu Icon
         type: string
         hidden: true
+
       - name: order
         label: Menu Order
         type: number
         hidden: true
+
       - name: body
         label: Body
         type: rich-text
+
+  - name: site-settings
+    label: Site Settings
+    type: file
+    path: _config.yml
+    format: raw
+
+  - name: contact
+    label: Sidebar Contact Links
+    type: file
+    path: _data/contact.yml
+    format: raw
+
+  - name: sharing
+    label: Post Sharing Buttons
+    type: file
+    path: _data/share.yml
+    format: raw
