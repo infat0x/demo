@@ -4,16 +4,19 @@ media:
 
 content:
   - name: posts
-    label: Yazılar
+    label: Posts
     type: collection
     path: _posts
     format: yaml-frontmatter
     filename: "{year}-{month}-{day}-{title}.md"
     fields:
       - name: title
-        label: Başlıq
+        label: Title
         type: string
         required: true
+      - name: image
+        label: Cover Image
+        type: image
       - name: body
-        label: Mətn
+        label: Body
         type: rich-text
