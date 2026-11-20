@@ -17,6 +17,28 @@ content:
       - name: image
         label: Cover Image
         type: image
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: body
+        label: Body
+        type: rich-text
+
+  - name: about
+    label: About
+    type: file
+    path: _tabs/about.md
+    format: yaml-frontmatter
+    fields:
+      - name: icon
+        label: Icon
+        type: string
+        hidden: true
+      - name: order
+        label: Menu Order
+        type: number
+        hidden: true
       - name: body
         label: Body
         type: rich-text
