@@ -1,6 +1,11 @@
+settings:
+  content:
+    merge: true
+
 media:
   input: assets/img
   output: /assets/img
+  categories: [image]
 
 content:
   - name: posts
@@ -8,11 +13,22 @@ content:
     type: collection
     path: _posts
     format: yaml-frontmatter
-    filename: "{year}-{month}-{day}-{title}.md"
+    subfolders: false
     exclude:
       - .placeholder
+    filename:
+      template: "{year}-{month}-{day}-{primary}.md"
+      field: create
+    operations:
+      rename: false
     view:
       primary: title
+      fields: [title, date, published, categories]
+      sort: [date, title]
+      search: [title, description, tags]
+      default:
+        sort: date
+        order: desc
     fields:
       - name: title
         label: Title
@@ -32,15 +48,13 @@ content:
         type: string
         list:
           max: 2
+        description: "Add a main category and, optionally, a subcategory."
 
       - name: tags
         label: Tags
         type: string
         list: true
-
-      - name: author
-        label: Author ID
-        type: string
+        description: "Add one lowercase tag per item."
 
       - name: date
         label: Publication Date
@@ -49,6 +63,18 @@ content:
         options:
           time: true
           format: "yyyy-MM-dd HH:mm:ss xx"
+        description: "Leave blank to use the date in the filename."
+
+      - name: author
+        label: Author ID
+        type: string
+        description: "Use an ID from _data/authors.yml, or leave blank for the default author."
+
+      - name: published
+        label: Published
+        type: boolean
+        default: true
+        description: "Turn off to hide this post from the site. Its source is still visible in a public repository."
 
       - name: pin
         label: Pin to Home
@@ -65,14 +91,22 @@ content:
         type: boolean
         default: true
 
-      - name: published
-        label: Published
+      - name: math
+        label: Enable Math
         type: boolean
-        default: true
+        default: false
+
+      - name: mermaid
+        label: Enable Mermaid
+        type: boolean
+        default: false
 
       - name: body
         label: Body
         type: rich-text
+        options:
+          format: markdown
+          switcher: true
 
   - name: about
     label: About
@@ -80,25 +114,39 @@ content:
     path: _tabs/about.md
     format: yaml-frontmatter
     fields:
-      - name: icon
-        label: Menu Icon
-        type: string
-        hidden: true
-
-      - name: order
-        label: Menu Order
-        type: number
-        hidden: true
-
       - name: body
         label: Body
         type: rich-text
+        options:
+          format: markdown
+          switcher: true
 
-  - name: site-settings
+  - name: site
     label: Site Settings
     type: file
     path: _config.yml
-    format: raw
+    format: yaml
+    fields:
+      - name: title
+        label: Site Name
+        type: string
+        required: true
+
+      - name: tagline
+        label: Tagline
+        type: string
+
+      - name: description
+        label: Site Description
+        type: text
+
+      - name: avatar
+        label: Profile Picture
+        type: image
+
+      - name: social_preview_image
+        label: Default Social Preview Image
+        type: image
 
   - name: contact
     label: Sidebar Contact Links
