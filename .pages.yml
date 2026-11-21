@@ -5,9 +5,8 @@ settings:
 media:
   input: assets/img
   output: /assets/img
-  categories: [image]
-  extensions: [jpg, jpeg, png, webp, gif, svg, avif]
-  rename: safe
+  extensions: [jpg, jpeg, png, webp, gif, svg, avif, ico]
+  rename: false
 
 content:
   - name: posts
@@ -51,7 +50,7 @@ content:
       - name: image
         label: Cover Image
         type: image
-        description: "A landscape image around 1200 x 630 works well."
+        description: "Recommended size: 1200 x 630 pixels."
 
       - name: categories
         label: Categories
@@ -64,7 +63,7 @@ content:
         label: Tags
         type: string
         list: true
-        description: "Add one lowercase tag per item, such as windows or jekyll."
+        description: "Add one lowercase tag per item."
 
       - name: date
         label: Publication Date
@@ -73,7 +72,7 @@ content:
         options:
           time: true
           format: "yyyy-MM-dd HH:mm:ss xx"
-        description: "Optional. Use this to override the date in the filename."
+        description: "Leave blank to use the date in the filename."
 
       - name: author
         label: Author ID
@@ -84,7 +83,7 @@ content:
         label: Published
         type: boolean
         default: true
-        description: "Turn off to hide the post from the site. Its source remains visible in the public repository."
+        description: "Turn off to hide the post from the site. Its source remains visible in a public repository."
 
       - name: pin
         label: Pin to Home
@@ -168,7 +167,7 @@ content:
           - name: icon
             label: Sidebar Icon
             type: string
-            description: "For example, fas fa-link."
+            description: "For example, fas fa-folder."
 
           - name: order
             label: Sidebar Order
